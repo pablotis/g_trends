@@ -1,0 +1,56 @@
+---
+title: "Tendencias de Google para #R"
+author: "Pablo Tiscornia"
+date: "8/4/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+	echo = FALSE,
+	message = FALSE,
+	warning = FALSE
+)
+options(scipen = 999)
+Sys.setenv(TZ='America/Argentina/Buenos_Aires')
+```
+
+```{r}
+#install.packages('gtrendsR')
+# if (!require("devtools")) install.packages("devtools")
+# devtools::install_github("PMassicotte/gtrendsR")
+
+library(gtrendsR)
+library(tidyverse)
+library(gt)
+```
+
+
+## Analizando la tendencia de #Vuelos en Argentina
+
+### Pasajes
+```{r echo=FALSE}
+tendencias <- gtrends(
+  keyword = c("/m/0212jm", "/m/05ymvd", "/m/018fh1"),
+  gprop = "web",
+  geo = "AR",
+  time = "2018-01-01 2021-10-30",
+  hl = "en")
+
+
+tendencias_serie <- tendencias$interest_over_time
+
+tendencias_serie <- tendencias_serie %>% 
+  mutate(keyword = case_when(keyword == "/m/0212jm" ~ "R",
+                   keyword == "/m/05ymvd" ~ "Stata",
+                   keyword == "/m/018fh1" ~ "SPSS"))
+# Pasajes
+tendencias_serie %>% 
+  ggplot(aes(x = date, y = hits, group = keyword, col = keyword)) +
+  geom_line() +
+  geom_smooth(span=0.2, se=FALSE) +
+  theme_bw() + 
+  labs(title = "Búsquedas en Google sobre Software para procesamiento de datos", 
+       x = "Fecha", y = "Interés relativo", fill = "Término")
+```
+
