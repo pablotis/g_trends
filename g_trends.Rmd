@@ -26,9 +26,9 @@ library(gt)
 ```
 
 
-## Analizando la tendencia de #Vuelos en Argentina
+## Analizando la tendencia de #software en Argentina
 
-### Pasajes
+### Soft
 ```{r echo=FALSE}
 tendencias <- gtrends(
   keyword = c("/m/0212jm", "/m/05ymvd", "/m/018fh1"),
@@ -44,7 +44,7 @@ tendencias_serie <- tendencias_serie %>%
   mutate(keyword = case_when(keyword == "/m/0212jm" ~ "R",
                    keyword == "/m/05ymvd" ~ "Stata",
                    keyword == "/m/018fh1" ~ "SPSS"))
-# Pasajes
+# Viz
 tendencias_serie %>% 
   ggplot(aes(x = date, y = hits, group = keyword, col = keyword)) +
   geom_line() +
